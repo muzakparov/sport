@@ -18,24 +18,24 @@ import { LinkContainer } from "react-router-bootstrap";
 
 //uncomment this for PRODUCTION
 import { root_url } from '../App'
-import { isProduction } from '../App'
+import { isProduction } from '../constants'
 
 
 class TableNavigation extends Component {
   render() {
     return (
       <Nav bsStyle="tabs" activeKey={this.props.activeKey}>
-        <LinkContainer exact to="/" >
+        <LinkContainer exact to={isProduction?(root_url+"/"):("/")}>
           <NavItem eventKey="1">
             Competitions
           </NavItem>
         </LinkContainer>
-        <LinkContainer exact to="/teams" >
+        <LinkContainer exact to={isProduction?(root_url+"/teams"):"/teams"} >
           <NavItem eventKey="2">
             Teams
           </NavItem>
         </LinkContainer>
-        <LinkContainer exact to="/matches" >
+        <LinkContainer exact to={isProduction?(root_url+"/matches"):"/matches"} >
           <NavItem eventKey="3">
             Matches
           </NavItem>

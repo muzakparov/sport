@@ -24,9 +24,12 @@ import Teams from './components/Teams'
 import Matches from './components/Matches'
 import NavBar from './components/NavBar'
 
+import { cookieName } from "./constants"
+
 const isProduction=false;
 
-const cookieName="cookieName"
+//uncomment this for PRODUCTION
+export const root_url = isProduction?window.location.pathname:""
 
 class App extends Component {
   constructor(){
@@ -38,6 +41,19 @@ class App extends Component {
 
     this.handleLogin = this.handleLogin.bind(this)
     this.handleLogout = this.handleLogout.bind(this)
+  }
+
+  componentDidMount() {
+    const cookie = Cookies.get(cookieName);
+    if (isProduction && cookie!==undefined) {      
+      console.log("componentDidMount-", cookie)
+    }
+    
+    if (isProduction) {
+      if (cookie !== undefined) {
+        this.setState({ isLoggedIn: true })
+      }
+    }
   }
 
   handleLogin() {

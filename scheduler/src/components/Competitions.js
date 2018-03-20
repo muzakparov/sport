@@ -28,6 +28,10 @@ class Teams extends Component {
 
     this.state = {
       competitions: [],
+      teams:[],
+      matches:[],
+      check:"",
+      value:"",
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -41,19 +45,24 @@ class Teams extends Component {
 
     console.log("competitions", this.props.test)
 
-    fetch("http://localhost:3001/competitions")
+    fetch("http://localhost:3001/all")
       .then((res) => res.json())
       .then(data => {
         console.log("data", data)
 
         this.setState({
-          competitions: data,
+          check:data.check,
+          competitions: data.competitions,
+          teams:data.teams,
+          matches:data.matches,
           value: "",
         })
       })
 
-      console.log("scheduler") 
-      fetch("https://cct-stage.iosport.co.uk/api/scheduler").then(res=>console.log("scheduler", res)).catch(e=>console.log("ERRORED"))
+      console.log("scheduler componentDidMount") 
+      // fetch("https://cct-stage.iosport.co.uk/api/scheduler")
+      // .then(res=>console.log("scheduler", res))
+      // .catch(e=>console.log("ERRORED"))
   }
 
   handleChange(e) {
@@ -62,6 +71,9 @@ class Teams extends Component {
     this.setState({
       value,
     })
+
+    if(value==="")
+      return
 
     if (e.key === "Enter") {
       console.log("Enter pressed")
@@ -79,12 +91,17 @@ class Teams extends Component {
         value: "",
       })
 
-      this.postJSON(newCompetition)
+      this.postJSON({
+        check: this.state.check,
+        competitions:this.state.competitions,
+        teams:this.state.teams,
+        matches:this.state.matches,
+      })
     }
   }
 
-  postJSON(competitionObj) {
-    axios.post("http://localhost:3001/competitions", competitionObj)
+  postJSON(schedulerObj) {
+    axios.post("http://localhost:3001/all", schedulerObj)
       .then(res => {
         console.log(res)
       })
@@ -101,6 +118,10 @@ class Teams extends Component {
 
     console.log("newIndex", typeof lastIndex)
 
+    if(this.state.value===""){
+      return
+    }
+
     const competition = { id: newIndex, name: this.state.value }
 
     competitions.push(competition)
@@ -110,7 +131,19 @@ class Teams extends Component {
       value: "",
     })
 
-    axios.post("http://localhost:3001/competitions", competition)
+    const self=this
+
+    axios.post("http://localhost:3001/all", {
+      check: this.state.check,
+      competitions:this.state.competitions,
+      teams:this.state.teams,
+      matches:this.state.matches,
+    })
+    .catch(err=>{
+      console.log("someone else added before you did")
+      self.componentDidMount()
+      self.handleAddClick()
+    })
   }
 
   handleRemove(id) {
@@ -123,7 +156,19 @@ class Teams extends Component {
       competitions,
     })
 
-    axios.delete("http://localhost:3001/competitions/" + id)
+    const self=this
+
+    axios.post("http://localhost:3001/all", {
+      check: this.state.check,
+      competitions:this.state.competitions,
+      teams:this.state.teams,
+      matches:this.state.matches,
+    })
+    .catch(err=>{
+      console.log("someone else added before you did")
+      self.componentDidMount()
+      setTimeout(()=>{self.handleRemove(id)},100);
+    })
   }
 
   render() {

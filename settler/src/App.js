@@ -61,7 +61,6 @@ class App extends Component {
         this.setState({ isLoggedIn: true })
       }
     }
-
   }
 
   // componentDidUpdate(){

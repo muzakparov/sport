@@ -1,100 +1,91 @@
 {
-  "competitions": [
-    {
-      "id": 1,
-      "name": "ioSport Virtual IPL"
-    },
-    {
-      "id": 2,
-      "name": "Big Bash League"
-    },
-    {
-      "id": 3,
-      "name": "Trans-Tasman Tri-Series"
-    },
-    {
-      "id": "4",
-      "name": "test2"
-    }
-  ],
-  "teams": [
-    {
-      "id": 1,
-      "name": "Gujarat Lions"
-    },
-    {
-      "id": 2,
-      "name": "Royal Challengers Bangalore"
-    },
-    {
-      "id": 11,
-      "name": "Adelaide Strikers"
-    },
-    {
-      "id": 12,
-      "name": "Brisbane Heat"
-    },
-    {
-      "id": 18,
-      "name": "Sydney Thunder"
-    },
-    {
-      "id": 21,
-      "name": "India"
-    },
-    {
-      "id": 22,
-      "name": "Sri Lanka"
-    },
-    {
-      "id": 28,
-      "name": "Afghanistan"
-    },
-    {
-      "id": 29,
-      "name": "Zimbabwe"
-    },
-    {
-      "id": "30",
-      "name": "joe"
-    },
-    {
-      "id": 31,
-      "name": ""
-    }
-  ],
-  "matches": [
-    {
-      "id": 40037,
-      "competition": 3,
-      "home": 1,
-      "away": 2,
-      "overs": 20,
-      "start": "2018-02-16T06:00:00Z"
-    },
-    {
-      "id": 40038,
-      "competition": 3,
-      "home": 1,
-      "away": 2,
-      "overs": 20,
-      "start": "2018-02-18T06:00:00Z"
-    },
-    {
-      "id": 40039,
-      "competition": 4,
-      "home": 1,
-      "away": 2,
-      "overs": 20,
-      "start": "2018-02-18T12:30:00Z"
-    },
-    {
-      "id": 40040,
-      "competition": 4,
-      "home": 1,
-      "away": 2,
-      "overs": 20,
-      "start": "2018-02-21T16:00:00Z"
-    }
-  ]
+  "all": {
+    "check": "1",
+    "competitions": [
+      {
+        "id": 1,
+        "name": "ioSport Virtual IPL"
+      },
+      {
+        "id": 2,
+        "name": "Big Bash League"
+      },
+      {
+        "id": 3,
+        "name": "Trans-Tasman Tri-Series"
+      },
+      {
+        "id": "4",
+        "name": "sdfsdf"
+      }
+    ],
+    "teams": [
+      {
+        "id": 1,
+        "name": "Gujarat Lions"
+      },
+      {
+        "id": 2,
+        "name": "Royal Challengers Bangalore"
+      },
+      {
+        "id": 11,
+        "name": "Adelaide Strikers"
+      },
+      {
+        "id": 12,
+        "name": "Brisbane Heat"
+      },
+      {
+        "id": 18,
+        "name": "Sydney Thunder"
+      },
+      {
+        "id": 21,
+        "name": "India"
+      },
+      {
+        "id": 22,
+        "name": "Sri Lanka"
+      },
+      {
+        "id": 28,
+        "name": "Afghanistan"
+      },
+      {
+        "id": 29,
+        "name": "Zimbabwe"
+      },
+      {
+        "id": "30",
+        "name": "asd"
+      }
+    ],
+    "matches": [
+      {
+        "id": 40037,
+        "competition": 3,
+        "home": "India",
+        "away": "Sydney Thunder",
+        "overs": 20,
+        "start": "2018-01-31T06:00:00Z"
+      },
+      {
+        "id": 40038,
+        "competition": 3,
+        "home": 1,
+        "away": 2,
+        "overs": 20,
+        "start": "2018-02-18T06:00:00Z"
+      },
+      {
+        "id": 40039,
+        "competition": 4,
+        "home": 1,
+        "away": 2,
+        "overs": 20,
+        "start": "2018-02-18T12:30:00Z"
+      }
+    ]
+  }
 }

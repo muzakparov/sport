@@ -27,7 +27,11 @@ class Teams extends Component {
     super()
 
     this.state = {
-      teams: [],
+      competitions: [],
+      teams:[],
+      matches:[],
+      check:"",
+      value:"",
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -37,13 +41,16 @@ class Teams extends Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:3001/teams")
+    fetch("http://localhost:3001/all")
       .then((res) => res.json())
       .then(data => {
         console.log("data", data)
 
         this.setState({
-          teams: data,
+          check:data.check,
+          competitions: data.competitions,
+          teams:data.teams,
+          matches:data.matches,
           value: "",
         })
       })
@@ -57,6 +64,9 @@ class Teams extends Component {
     this.setState({
       value,
     })
+
+    if(!value.length)
+      return
 
     if (e.key === "Enter") {
       console.log("Enter pressed")
@@ -74,7 +84,12 @@ class Teams extends Component {
         value: "",
       })
 
-      this.postJSON(newTeam)
+      this.postJSON({
+        check: this.state.check,
+        competitions:this.state.competitions,
+        teams:this.state.teams,
+        matches:this.state.matches,
+      })
     }
   }
 
@@ -85,6 +100,9 @@ class Teams extends Component {
     const newIndex=Number(lastIndex)+1
     const team={id:newIndex, name: this.state.value}
 
+    if(this.state.value==="")
+      return
+
     teams.push(team)
 
     this.setState({
@@ -92,7 +110,19 @@ class Teams extends Component {
       value:"",
     })
 
-    axios.post("http://localhost:3001/teams",team)
+    const self=this
+
+    axios.post("http://localhost:3001/all", {
+      check: this.state.check,
+      competitions:this.state.competitions,
+      teams:this.state.teams,
+      matches:this.state.matches,
+    })
+    .catch(err=>{
+      console.log("someone else added before you did")
+      self.componentDidMount()
+      self.handleAddClick()
+    })
   }
 
   handleRemove(id){
@@ -105,7 +135,19 @@ class Teams extends Component {
       teams,
     })
 
-    axios.delete("http://localhost:3001/teams/"+id)
+    const self=this
+
+    axios.post("http://localhost:3001/all", {
+      check: this.state.check,
+      competitions:this.state.competitions,
+      teams:this.state.teams,
+      matches:this.state.matches,
+    })
+    .catch(err=>{
+      console.log("someone else added before you did")
+      self.componentDidMount()
+      setTimeout(()=>{self.handleRemove(id)},100);
+    })
 
   }
 

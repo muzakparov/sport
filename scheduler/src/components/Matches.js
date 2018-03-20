@@ -30,6 +30,7 @@ class Matches extends Component {
     const currentDate=moment().format("YYYY-MM-DD")    
 
     this.state = {
+      check:"",
       competitions: [],
       teams: [],
       matches: [],
@@ -40,11 +41,11 @@ class Matches extends Component {
         away:"Choose",
         date:currentDate,
         time:"00:00:00",
-        overs:0,
+        overs:"Choose",
       },
     }
 
-    this.makeGetCall = this.makeGetCall.bind(this)
+    // this.makeGetCall = this.makeGetCall.bind(this)
     this.handleSelectChange = this.handleSelectChange.bind(this)
     this.handleDateChange = this.handleDateChange.bind(this)
     this.handleMatchOversChange = this.handleMatchOversChange.bind(this)
@@ -62,31 +63,50 @@ class Matches extends Component {
   }
 
   componentDidMount() {
-    const self = this    
+    const self = this
+    
+    axios.get("http://localhost:3001/all")
+    .then(res=>res.data)
+    .then(data=>{
+      console.log("MATCHES DATA", data)
 
-    axios.all([this.makeGetCall("matches"), this.makeGetCall("competitions"), this.makeGetCall("teams")])
-      .then(axios.spread(function (matches, competitions, teams) {
-        // Both requests are now complete
-        self.setState({
-          matches: matches.data,
-          competitions: competitions.data,
-          teams: teams.data,
-        })
-      }))
-      .then(()=>{
+      this.setState(data, ()=>{
+        console.log("MATCHES state was settled")
+
         const rowIsChangedArr=this.state.matches.map(match=>{
           return {id:match.id, isChanged:false}
         })
-
+        
         this.setState({
           rowIsChangedArr,
         })
-      })      
+      }) 
+    })
+    
+
+    // axios.all([this.makeGetCall("matches"), this.makeGetCall("competitions"), this.makeGetCall("teams")])
+    //   .then(axios.spread(function (matches, competitions, teams) {
+    //     // Both requests are now complete
+    //     self.setState({
+    //       matches: matches.data,
+    //       competitions: competitions.data,
+    //       teams: teams.data,
+    //     })
+    //   }))
+    //   .then(()=>{
+    //     const rowIsChangedArr=this.state.matches.map(match=>{
+    //       return {id:match.id, isChanged:false}
+    //     })
+
+    //     this.setState({
+    //       rowIsChangedArr,
+    //     })
+    //   })      
   }
 
-  makeGetCall(paramStr) {
-    return axios.get("http://localhost:3001/" + paramStr)
-  }
+  // makeGetCall(paramStr) {
+  //   return axios.get("http://localhost:3001/" + paramStr)
+  // }
 
   handleSelectChange(e, matchId, prop) {
     const id = e.target.value    
@@ -190,6 +210,20 @@ class Matches extends Component {
     })
 
     //axios.delete(url,objToBeDeleted)
+    const self=this
+    
+    axios.post("http://localhost:3001/all",{
+      check:this.state.check,
+      competitions:this.state.competitions,
+      teams:this.state.teams,
+      matches:this.state.matches,
+    })
+    .catch(err=>{
+      console.log("add err", err)
+
+      self.componentDidMount()
+      self.deleteMatch(matchId)
+    })
   }
 
   handleNewMatchChange(e, prop){
@@ -253,7 +287,7 @@ class Matches extends Component {
     newMatchReconstruct.away="Choose"
     newMatchReconstruct.start=moment().format("YYYY-MM-DD")
     newMatchReconstruct.time="00:00:00"
-    newMatchReconstruct.overs=0;
+    newMatchReconstruct.overs="Choose";
 
     this.setState({
       matches,
@@ -261,7 +295,20 @@ class Matches extends Component {
       newMatch:newMatchReconstruct,
     })
 
+    const self=this
     
+    axios.post("http://localhost:3001/all",{
+      check:this.state.check,
+      competitions:this.state.competitions,
+      teams:this.state.teams,
+      matches:this.state.matches,
+    })
+    .catch(err=>{
+      console.log("add err", err)
+
+      self.componentDidMount()
+      self.addNewMatch()
+    })
   }
 
   updateMatch(matchId){
@@ -278,6 +325,21 @@ class Matches extends Component {
 
     this.setState({
       rowIsChangedArr,
+    })
+
+    const self=this
+
+    axios.post("http://localhost:3001/all",{
+      check:this.state.check,
+      competitions:this.state.competitions,
+      teams:this.state.teams,
+      matches:this.state.matches,
+    })
+    .catch(err=>{
+      console.log("add err", err)
+
+      self.componentDidMount()
+      self.updateMatch(matchId)
     })
   }
 
@@ -404,7 +466,11 @@ class Matches extends Component {
                   <input type="time" value={newMatch.time}   onChange={e=>this.handleNewMatchDateInput(e, "time")}/>
                 </td>
                 <td>
-                  <input type="number" value={newMatch.overs}   onChange={e=>this.handleNewMatchDateInput(e, "overs")}/>
+                  <select value={newMatch.overs}   onChange={e=>this.handleNewMatchDateInput(e, "overs")}>
+                    <option value="Choose">Choose</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                  </select>
                 </td>
                 <td>
                   <Button onClick={this.addNewMatch}>
